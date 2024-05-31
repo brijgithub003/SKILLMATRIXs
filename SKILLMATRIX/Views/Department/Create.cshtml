@@ -1,0 +1,37 @@
+﻿@model SKILLMATRIX.Repo.ViewModels.DepartmentViewModel
+@{
+	ViewData["Title"] = "New Department";
+}
+<div class="col-md-12 mt-2">
+	<div class="card mb-4">
+		<h5 class="card-header bg-info text-white">New Department</h5>
+		<div class="card-body">
+			<form asp-action="Create">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="form-group">
+					<label asp-for="Department_Name" class="control-label"></label>
+					<input asp-for="Department_Name" class="form-control" placeholder="Department Name" />
+					<span asp-validation-for="Department_Name" class="text-danger"></span>
+				</div>
+				<div class="row mt-2">
+					<div class="col-6">
+						<div class="form-group float-start">
+							<input type="submit" value="Save" class="btn btn-success" />
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group float-end">
+							<a class="text-white btn btn-info" asp-action="Index">Back</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

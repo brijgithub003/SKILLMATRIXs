@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Station List";
+}
+<link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<div class="content mt-2">
+    <div class="card">
+        <div class="card">
+            <div class="container-fluid btn-group mt-2">
+                <div class="col-11">
+                    <h4> @ViewData["Title"]</h4>
+                </div>
+                <div class="col-2 justify-content-end">
+                    <p>
+                        <a class="btn btn-success" asp-action="Create">Add New</a>
+                    </p>
+                </div>
+            </div>
+            <div class="m-2">
+                <table id="customerDatatable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Station Id</th>
+                            <th>Station Name</th>
+                            <th>Line Id</th>
+                            <th>CreateDate</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts
+    {
+        <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#customerDatatable').dataTable({
+                    "paging": true,
+                    "pagingType": 'full_numbers',
+                    "ajax": {
+                        "url": "/Station/Results",
+                        "type": "GET",
+                        "datatype": "json",
+                    },
+                    "columns": [
+                        { "data": "statioN_ID", "title": "#ID" },
+                        { "data": "statioN_NAME", "title": "Line Name" },
+                        { "data": "linE_ID", "title": "Line No" },
+                        {
+                            "data": "createdate", render: function (data) {
+                                return formatDate(data);
+                            }
+                        },
+                        {
+                            "data": "statioN_ID", render: function (data) {
+                                return "<a href='/Station/Edit/" + data + "' class='btn btn-primary btn-sm text-white'>Edit</a> <a class='btn btn-danger btn-sm text-white' href='/Station/Delete/" + data + "'>Delete</a>"
+                            },
+                            "orderable": false,
+                            "width": "150px"
+                        },
+                    ],
+                    Error: function (error) {
+                        alert("Ajax Error" + error);
+                    }
+                });
+            });
+
+            function formatDate(d) {
+                var ds = new Date(d),
+                    month = '' + (ds.getMonth() + 1),
+                    day = '' + ds.getDate(),
+                    year = ds.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [day, month, year].join('-');
+            }
+
+            //MSG Flash
+            $(document).ready(function () {
+                var msg = "@(TempData["SuccessMessage"])";
+                if (msg) {
+                    swal({
+                        title: "Information",
+                        text: msg,
+                        icon: "success",
+                        button: "OK",
+                    });
+                }
+            });
+
+
+        </script>
+    }
